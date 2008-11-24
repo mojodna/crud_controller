@@ -1,0 +1,8 @@
+<%% content_tag_for :tr, <%= file_name %> do -%>
+<% eval(class_name).content_columns.reject {|col| col.name =~ /created_at|updated_at/ }.each do |col| -%>
+  <td><%%= h(<%= file_name %>.<%= col.name %>) %></td>
+<% end -%>
+  <td class="action">
+    <%%= link_to 'Edit', edit_<%= file_name %>_url(<%= file_name %>) %>
+  </td>
+<%% end -%>

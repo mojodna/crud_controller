@@ -1,0 +1,11 @@
+<h1>Show <%= class_name %></h1>
+
+<%% content_tag_for :dl, @<%= file_name %> do -%>
+<% eval(class_name).content_columns.reject {|col| col.name =~ /ated_at$/ }.each do |col| -%>
+  <dt><label for="<%= file_name %>_<%= col.name %>"><%= col.name.humanize %></label></dt>
+  <dd><%%= h(@<%= class_name.underscore %>.<%= col.name %>) %></dd>
+
+<% end -%>
+<%% end %>
+
+<p><%%= link_to 'edit', edit_<%= file_name %>_url(@<%= file_name %>) %> | <%%= link_to 'back', <%= file_name.pluralize %>_url %></p>

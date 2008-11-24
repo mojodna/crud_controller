@@ -1,0 +1,16 @@
+<%% labeled_form_for <%= file_name %> do |f| %>
+  <%%= error_messages_for :<%= file_name %> %>
+  <% eval(class_name).content_columns.reject {|col| col.name =~ /ated_at$/ }.each do |col| -%>
+    <% field_type = case col.type 
+                    when :string, :integer, :float, :decimal  then :text_field
+                    when :datetime, :timestamp, :time         then :datetime_select
+                    when :date                                then :date_select
+                    when :text                                then :text_area
+                    when :boolean                             then :check_box
+                    end
+    -%>
+    <%%= f.<%=field_type.to_s %> <%= ':' + col.name %> %>
+  <% end -%>
+
+    <div class="submit"><%%= create_or_update_submit_tag(<%= file_name %>) %> or <%%= cancel_link %></div>
+<%% end %>

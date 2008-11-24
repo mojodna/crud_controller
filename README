@@ -1,0 +1,71 @@
+CrudGenerator
+=============
+
+A combination of a base controller class, and a generator. You use the CRUDController as the base class for your controllers (e.g. BooksController < CRUDController). You use the generators to generate the models / controllers, much like the scaffold generator and scaffold_resource generator. The views that get generated all follow the syntax of the new RESTful features built into Rails, and the conventions used by the SimplyHelpful plugin.
+
+You don't have to move code anywhere, the CRUDController and helper hook themselves in automatically. There are various ways to override the behavior of the CRUDController without needing to replace the method by writing it directly in your controller.
+
+INSTRUCTIONS
+===============
+
+Generates a CRUD-ready controller and model.
+
+Example:
+
+  script/generate crud book
+
+Will generate a Book model (and associated migration), a Books controller (which inherits from CRUDController), and some sample views.
+
+This generator assumes the use Rails 1.2+, so don't forget to put something like:
+
+  map.resources :books
+
+in your routes.rb.
+
+EXAMPLES:
+=============
+
+These examples are taken from real applications.
+
+For an XML API controller where we only wanted to allow :show and :index methods. This particular controller just delivers XML to HTTP requests from a Flash SWF running in the page. This examples shows the override for the model name and a way to block some of the default actions that would otherwise be available by inheritance.
+
+class PlaylistApiController < CRUDController
+  undef :new, :create, :edit, :update, :destroy
+  model_class Playlist
+end
+
+This example shows overrides of some methods (including controller actions and the protected #build_model)
+
+class ProductsController < CRUDController
+  def update
+    current_instance.product_images << @product_images if @product_images
+    super
+  end
+  
+protected
+
+  def build_model
+    product = super
+    returning product do
+      product.product_images << @product_images if @product_images
+    end
+  end
+end
+
+
+
+Requirements
+============
+
+  * Rails 1.2+
+  * SimplyHelpful plugin (http://dev.rubyonrails.com/svn/rails/plugins/simply_helpful)
+  * AuthenticatedSystem from acts_as_authenticated or restful_authentication
+
+
+Credits
+==========
+
+Influenced by the implementations by Dan Peterson (http://svn.dpiddy.net/plugins/crud_generator/) and Jake Howerton (http://geekonomics.blogspot.com/2006/07/crud-and-shared-controllers.html)
+
+Modified and maintained by Trotter Cashion, Seth Fitzsimmons and Matt Pelletier of EastMedia.
+

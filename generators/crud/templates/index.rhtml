@@ -1,0 +1,22 @@
+<h1><%= class_name.titleize.pluralize %></h1>
+
+<%% unless @<%= table_name %>.empty? %>
+<table id="<%= table_name %>" class="index" border="0" cellpadding="0" cellspacing="0">
+  <thead>
+    <tr>
+<% eval(class_name).content_columns.reject {|col| col.name =~ /ated_at$/ }.each do |col| -%>
+      <th><%= col.name.humanize %></th>
+<% end -%>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%%= render :partial => @<%= table_name %> %>
+  </tbody>
+</table>
+<%%= ruled_table '<%= table_name %>' %>
+<%% else %>
+  <p>No <%= class_name.titleize.pluralize %></p>
+<%% end %>
+
+<p><%%= link_to 'New <%= file_name.titleize.humanize %>', new_<%= file_name %>_url %></p>
